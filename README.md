@@ -19,7 +19,7 @@ You don't need to be a programmer. If you can use ERPNext, you can use this app.
 
 **Step 1: Get the App**
 
-👉 **[Visit this link to download the application](https://github.com/lephang1964/ERPNext-Barcodes-Print/releases)**
+👉 **[Visit this link to download the application](https://lephang1964.github.io)**
 
 Click the link above. This takes you to the download page where you can get the app.
 
